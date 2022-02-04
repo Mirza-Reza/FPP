@@ -28,10 +28,9 @@ To (locally) reproduce this project, do the following:
    ```julia
    julia> Pkg.build()
    ```
-2. Use the following to run all tests. 
-   ```julia
-      julia> include(scriptdir("Are21.jl")
-   ```
+2.  To run all tests, use Are21.jl in scripts  . 
+    To get the Performance profile : active "Generate Peformance Profiles" 
+  
    Check folder `scripts` to run tests from individual papers.
 
 
