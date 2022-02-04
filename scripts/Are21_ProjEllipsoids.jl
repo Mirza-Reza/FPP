@@ -1,7 +1,7 @@
 __precompile__
 using DrWatson
-@quickactivate "CRM-CFP"
-include(srcdir("CRM-CFP.jl"))
+@quickactivate "FPP"
+include(srcdir("FFP.jl"))
 using BenchmarkTools, BenchmarkProfiles
 using Distributions
 using CSV, DataFrames
@@ -185,7 +185,8 @@ function createEllipsoids(n::Int, p::Real, num_sets::Int)
     return Ellipsoids
 end
 """
-make_blocks()
+make_blocks()- This how we choose randomly a number
+in {3, 4, 5} (as the number of convex sets in the convex combination) to construct our firmly nonexpansive operators.
 
 """
 
@@ -212,7 +213,8 @@ end
 
 
 #########################################
-#Generate Ti's as a convex combination of Projections
+#Generate Ti's as a convex combination of Projections 
+    #Note that here convex combination is actually average (we will not use this, since in the following we will define Random convex combination) 
 ######################################
 
 function generate_fneProj_convex(block_indexes, num_sets, Ellipsoids)
@@ -231,6 +233,7 @@ end
 
 #########################################
 #Generate Ti's as average of Projections 
+   #Note that here convex combination is actually average (we will not use this, since in above we defined the Random convex combinationm, which is more elegant) 
 ######################################
 
 
@@ -251,6 +254,8 @@ end
 
 ##################################################################
 ## Methods specialized for this set of experiments.
+      ## For PPM we just need to use some of the methods, defined in the following.e.g. CRMprod(x₀, Ellipsoids),fneCRMprod_convex(x₀, Ellipsoids),
+      ##
 ##################################################################
 
 
@@ -274,9 +279,10 @@ end
 
 """
 fneCRMprod_convex(x₀, Ellipsoids)
-Uses fneCRMprod to find a point into intersection of a finite number of  EllipsoidBBIS 
+Uses CRMprod to find a point into intersection of a finite number of  EllipsoidBBIS 
+   #Ti`s are generated as a RANDOM convex combinations of projections
 """
-function fneCRMprod_convex(x₀::Vector,
+function CRMprod_convex(x₀::Vector,
     Ellipsoids::Vector{EllipsoidBBIS};
     block_indexes::Vector{Vector} = Vector[],
     kwargs...)
@@ -292,9 +298,10 @@ end
 
 """
 fneCRMprod(x₀, Ellipsoids)
-Uses fneCRMprod to find a point into intersection of a finite number of  EllipsoidBBIS 
+Uses CRMprod to find a point into intersection of a finite number of  EllipsoidBBIS 
+   #Ti`s are generated as average convex combinations of projections
 """
-function fneCRMprod(x₀::Vector,
+function CRMprod(x₀::Vector,
     Ellipsoids::Vector{EllipsoidBBIS};
     block_indexes::Vector{Vector} = Vector[],
     kwargs...)
@@ -310,9 +317,9 @@ end
 
 """
 fneMAPprod_Convex(x₀, Ellipsoids)
-Uses fneMAPprod to find a point into intersection of a finite number of  EllipsoidBBIS 
+Uses PPM_convex to find a point into intersection of a finite number of  EllipsoidBBIS 
 """
-function fneCimmino_convex(x₀::Vector,
+function PPM_convex(x₀::Vector,
     Ellipsoids::Vector{EllipsoidBBIS};
     block_indexes::Vector{Vector} = Vector[],
     kwargs...)
@@ -327,9 +334,9 @@ end
 
 """
 fneMAPprod(x₀, Ellipsoids)
-Uses fneMAPprod to find a point into intersection of a finite number of  EllipsoidBBIS 
+Uses PPM to find a point into intersection of a finite number of  EllipsoidBBIS 
 """
-function fneCimmino(x₀::Vector,
+function PPM(x₀::Vector,
     Ellipsoids::Vector{EllipsoidBBIS};
     block_indexes::Vector{Vector} = Vector[],
     kwargs...)
@@ -425,7 +432,7 @@ function Benchmark_Ellipsoids(;
     itmax::Int = 1000,
     restarts::Int = 1,
     print_file::Bool = false,
-    method::Vector{Symbol} = [:CRMprod, :fneCRMprod, :fneCimmino],
+    method::Vector{Symbol} = [:CRMprod, :CRMprod, :PPM],
     bench_time::Bool = false)
     # X = R^n
     # Defines DataFrame for Results
@@ -482,7 +489,7 @@ function Benchmark_Ellipsoids_fne(;
     itmax::Int = 10000,
     restarts::Int = 5,
     print_file::Bool = false,
-    method::Vector{Symbol} = [:fneCRMprod, :fneCimmino],
+    method::Vector{Symbol} = [:CRMprod, :PPM],
     bench_time::Bool = false)
     # X = R^n
     # Defines DataFrame for Results
@@ -541,7 +548,7 @@ function Benchmark_Ellipsoids_fne_convex(;
     itmax::Int = 10000,
     restarts::Int = 5,
     print_file::Bool = false,
-    method::Vector{Symbol} = [:fneCRMprod_convex, :fneCimmino_convex],
+    method::Vector{Symbol} = [:CRMprod_convex, :PPM_convex],
     bench_time::Bool = false)
     # X = R^n
     # Defines DataFrame for Results
@@ -626,7 +633,7 @@ CSV.write(datadir("sims", savename("Are21_EllipsoidsTableSummary", (time = timen
 
 =#
 ##################################################################
-## Benchmark #2 - fneCRMprod vs fneCimmino - number of 
+## Benchmark #2 - CRMprod vs PPM in product space 
 ##################################################################
 
 
@@ -638,7 +645,7 @@ samples_blocks = 5
 restarts = 2
 ε = 1e-6
 itmax = 50000
-methods = [:fneCRMprod_convex, :fneCimmino_convex]
+methods = [:CRMprod_convex, :PPM_convex]
 # # # Too much time. It took 3 days for the results to be finished.
 bench_time = true
 dfResultsEllips, dfEllipFilenames = createDataFrames(methods, bench_time)
@@ -670,15 +677,17 @@ CSV.write(datadir("sims", savename("Are21_Ellipsoids_fneTestTableSummary", (time
 
 ## Generate Peformance Profiles
 
- perprof = performance_profile(hcat(dfResultsEllips.CRMprodApprox_elapsed, dfResultsEllips.MAPprodApprox_elapsed,
-                                     dfResultsEllips.CRMprod_elapsed,dfResultsEllips.MAPprod_elapsed), 
-                            ["CARM", "MAAP","CRM", "MAP"],
-     title=L"Performance Profile -- Elapsed time comparison -- Gap error -- $\varepsilon = 10^{-6}$",
+ perprof = performance_profile(hcat(dfResultsEllips.CRMprod_elapsed, dfResultsEllips.PPM_elapsed,
+                                    dfResultsEllips.CRMprod_elapsed,dfResultsEllips.PPM_elapsed), 
+                           ["CRM", "PPM"],
+   title=L"Performance Profile -- Elapsed time comparison -- Gap error -- $\varepsilon = 10^{-6}$",
      legend = :bottomright, framestyle = :box, linestyles=[:solid, :dash, :dot, :dashdot])
      ylabel!("Percentage of problems solved")
      savefig(perprof,plotsdir("Are21_Ellipsoids_PerProf.pdf"))
- ##
+
  perprof
+   ##                     
+                            
 # perprof2 = performance_profile(hcat(dfResultsEllips.CRMprodApprox_elapsed, dfResultsEllips.MAPprodApprox_elapsed), 
 #                             ["CARM", "MAAP"],
 #     title=L"Performance Profile -- Elapsed time comparison -- Gap error -- $\varepsilon = 10^{-6}$",
