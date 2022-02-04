@@ -3,14 +3,14 @@
 
 This code base is using the Julia Language and [DrWatson](https://juliadynamics.github.io/DrWatson.jl/stable/)
 to make a reproducible scientific project named
-> CRM-CFP
+> FPP
 
-CRM-CFP concerns numerical results presented in [[Behling2021]](#1),  [[Arefidamghani2021]](#2), [[Araujo2021]](#3) and [[Behling2021a]](#4) where the Circumcentered-Reflection Method (CRM) was used to solve the Convex Feasibility Problem (CFP) of finding a common point to the nonempty intersection of closed and convex sets.
+FPP concerns numerical results presented in  [[Arefidamghani2022]](#1), [[Behling2022]](#2),  [[Iusem2022]](#3) and [[lrsantos2021a]](#4) where the 
+A circumcentered-reflection method for finding common fixed points of firmly nonexpansive operators
 
+It is authored by Luiz-Rafael Santos in co-authorship with Reza Arefidamghani, Roger Behling, and Alfredo N. Iusem. 
 
-It is authored by Luiz-Rafael Santos in co-authorship with Guilherme Araújo, Reza Arefidamghani, Roger Behling, Yunier Bello-Cruz and Alfredo N. Iusem. 
-
-## How to use CRM-CFP
+## How to use FPP
 
 To (locally) reproduce this project, do the following:
 
@@ -35,13 +35,12 @@ To (locally) reproduce this project, do the following:
    Check folder `scripts` to run tests from individual papers.
 
 
-3. The codes for [[Arefidamghani2021]](#2) and [[Araujo2021]](#3) depend on the package `NLPModelsAlgencan.jl`, which is a wrapper for Julia of [ALGENCAN](https://www.ime.usp.br/~egbirgin/tango/codes.php) that uses `NLPModels` (and `JuMP`). Follow the instructions of [`NLPModelsAlgencan.jl`](https://github.com/pjssilva/NLPModelsAlgencan.jl/wiki/Compiling-HSL-Libraries-for-use-with-NLPModelsAlgencan.jl) to install it with HSL linear system solver support for faster results.
 
 
 ## References
 
 
-<a id="1">[Behling2021]</a>  R. Behling, J.-Y. Bello-Cruz, and L.-R. Santos, _“On the Circumcentered-Reflection Method for the Convex Feasibility Problem”_, Numer. Algorithms, 86, p. 1475-1494 2021, doi: [10.1007/s11075-020-00941-6](https://doi.org/10.1007/s11075-020-00941-6), [arXiv:2001.01773](https://arxiv.org/abs/2001.01773).
+<a id="1">[Behling2021]</a>  R. Behling, L.-R. Santos, _“On the Circumcentered-Reflection Method for the Convex Feasibility Problem”_, Numer. Algorithms, 86, p. 1475-1494 2021, doi: [10.1007/s11075-020-00941-6](https://doi.org/10.1007/s11075-020-00941-6), [arXiv:2001.01773](https://arxiv.org/abs/2001.01773).
 
 <a id="2">[Arefidamghani2021]</a>  R. Arefidamghani, R. Behling, J.-Y. Bello-Cruz, A. N. Iusem, and L.-R. Santos, 
 _“The circumcentered-reflection method achieves better rates than alternating projections”_, Comp Optim App, 79(2),  p. 507–530, 2021, 
