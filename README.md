@@ -5,7 +5,7 @@ This code base is using the Julia Language and [DrWatson](https://juliadynamics.
 to make a reproducible scientific project named
 > FPP
 
-FPP concerns numerical results presented in  [[Arefidamghani2022]](#1), [[Behling2022]](#2),  [[Iusem2022]](#3) and [[lrsantos2021a]](#4) where the 
+FPP concerns numerical results presented in  [[Arefidamghani2022]](#1), [[Behling2022]](#2),  [[Iusem2022]](#3) and [[lrsantos2022]](#4) where the 
 A circumcentered-reflection method for finding common fixed points of firmly nonexpansive operators
 
 It is authored by Luiz-Rafael Santos in co-authorship with Reza Arefidamghani, Roger Behling, and Alfredo N. Iusem. 
